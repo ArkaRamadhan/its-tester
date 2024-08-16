@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <title>Export Data to Excel</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Export Data to Excel</h1>
+    <table id="sag-table">
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>NoMemo</th>
+          <th>Perihal</th>
+          <th>Pic</th>
+        </tr>
+      </thead>
+      <tbody id="sag-data">
+        {{ range .SK }}
+        <tr>
+          <td>{{ .Tanggal.Format "2006-01-02" }}</td>
+          <td>{{ .NoSurat }}</td>
+          <td>{{ .Perihal }}</td>
+          <td>{{ .Pic }}</td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+    <button id="export-btn">Export to Excel</button>
+    <button id="export-all-btn">Export All to Excel</button>
+    <button id="update-btn">Update to Excel</button>
+    <button id="update-all-btn">Update ALL to Excel</button>
+    <script>
+      document.getElementById("export-btn").addEventListener("click", function() {
+        window.location.href = "/exportSk";
+      });
+
+      document.getElementById("export-all-btn").addEventListener("click", function() {
+        window.location.href = "/exportAll";
+      });
+
+      document.getElementById("update-btn").addEventListener("click", function() {
+        window.location.href = "/updateSk";
+      });
+
+      document.getElementById("update-all-btn").addEventListener("click", function() {
+        window.location.href = "/updateAll";
+      });
+    </script>
+  </body>
+</html>

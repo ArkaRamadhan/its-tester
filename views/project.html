@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <title>Export Data to Excel</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Export Data to Excel</h1>
+    <table id="sag-table">
+      <thead>
+        <tr>
+            <th>Kode Project</th>
+            <th>Jenis Pengadaan</th>
+            <th>Deskripsi Pengadaan</th>
+            <th>Divisi Inisiasi</th>
+            <th>Bulan</th>
+            <th>Sumber Pendanaan</th>
+            <th>Anggaran</th>
+            <th>No Izin</th>
+            <th>Tgl Izin</th>
+            <th>Tgl TOR</th>
+            <th>Pic</th>
+        </tr>
+      </thead>
+      <tbody id="sag-data">
+        {{ range .Project }}
+        <tr>
+          <td>{{ .KodeProject }}</td>
+          <td>{{ .JenisPengadaan }}</td>
+          <td>{{ .NamaPengadaan }}</td>
+          <td>{{ .DivInisiasi }}</td>
+          <td>{{ .Bulan.Format "01-02-2006" }}</td>
+          <td>{{ .SumberPendanaan }}</td>
+          <td>{{ .Anggaran }}</td>
+          <td>{{ .NoIzin }}</td>
+          <td>{{ .TanggalIzin.Format "01-02-2006" }}</td>
+          <td>{{ .TanggalTor.Format "01-02-2006" }}</td>
+          <td>{{ .Pic }}</td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+    <button id="export-btn">Export to Excel</button>
+    <button id="export-all-btn">Export All to Excel</button>
+    <button id="update-btn">Update to Excel</button>
+    <button id="update-all-btn">Update ALL to Excel</button>
+    <script>
+      document.getElementById("export-btn").addEventListener("click", function() {
+        window.location.href = "/exportProject";
+      });
+
+      document.getElementById("export-all-btn").addEventListener("click", function() {
+        window.location.href = "/exportAll";
+      });
+
+      document.getElementById("update-btn").addEventListener("click", function() {
+        window.location.href = "/updateProject";
+      });
+
+      document.getElementById("update-all-btn").addEventListener("click", function() {
+        window.location.href = "/updateAll";
+      });
+    </script>
+  </body>
+</html>
