@@ -16,48 +16,42 @@ type isoRequest struct {
 	Pic     string `json:"pic"`
 }
 
+
 func IsoCreate(c *gin.Context) {
+    var requestBody isoRequest
 
-	// Get data off req body
-	var requestBody isoRequest
+    if err := c.BindJSON(&requestBody); err != nil {
+        log.Printf("Error binding JSON: %v", err)
+        c.Status(400)
+        c.Error(err) // log the error
+        return
+    }
 
-	if err := c.BindJSON(&requestBody); err != nil {
-		c.Status(400)
-		c.Error(err) // log the error
-		return
-	}
+    log.Println("Received request body:", requestBody)
 
-	// Add some logging to see what's being received
-	log.Println("Received request body:", requestBody)
+    tanggal, err := time.Parse("2006-01-02", requestBody.Tanggal)
+    if err != nil {
+        log.Printf("Error parsing date: %v", err)
+        c.JSON(400, gin.H{"error": "Invalid date format: " + err.Error()})
+        return
+    }
 
-	// Parse the date string
-	tanggalString := requestBody.Tanggal
-	tanggal, err := time.Parse("2006-01-02", tanggalString)
-	if err != nil {
-		c.Status(400)
-		c.JSON(400, gin.H{"error": "Invalid date format: " + err.Error()})
-		return
-	}
+    iso := models.Iso{
+        Tanggal: tanggal,
+        NoMemo:  requestBody.NoMemo,
+        Perihal: requestBody.Perihal,
+        Pic:     requestBody.Pic,
+    }
 
-	iso := models.Iso{
-		Tanggal: tanggal,
-		NoMemo:  requestBody.NoMemo,
-		Perihal: requestBody.Perihal,
-		Pic:     requestBody.Pic,
-	}
+    result := initializers.DB.Create(&iso)
+    if result.Error != nil {
+        log.Printf("Error saving to database: %v", result.Error)
+        c.Status(400)
+        return
+    }
 
-	result := initializers.DB.Create(&iso)
-
-	if result.Error != nil {
-		c.Status(400)
-		return
-	}
-
-	// Return it
-	c.JSON(200, gin.H{
-		"Iso": iso,
-	})
-
+    log.Println("Iso created successfully:", iso)
+    c.JSON(200, gin.H{"Iso": iso})
 }
 
 func IsoIndex(c *gin.Context) {
@@ -82,7 +76,7 @@ func IsoShow(c *gin.Context) {
 
 	//Respond with them
 	c.JSON(200, gin.H{
-		"Iso": iso,
+		"Iso": &iso,
 	})
 }
 
@@ -135,7 +129,7 @@ func IsoUpdate(c *gin.Context) {
     initializers.DB.Model(&iso).Updates(iso)
 
     c.JSON(200, gin.H{
-        "Iso": iso,
+        "Iso": &iso,
     })
 }
 

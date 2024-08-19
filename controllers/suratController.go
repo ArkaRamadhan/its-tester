@@ -30,14 +30,12 @@ func SuratCreate(c *gin.Context) {
 	// Add some logging to see what's being received
 	log.Println("Received request body:", requestBody)
 
-	// Parse the date string
-	tanggalString := requestBody.Tanggal
-	tanggal, err := time.Parse("2006-01-02", tanggalString)
-	if err != nil {
-		c.Status(400)
-		c.JSON(400, gin.H{"error": "Invalid date format: " + err.Error()})
-		return
-	}
+	tanggal, err := time.Parse("2006-01-02", requestBody.Tanggal)
+    if err != nil {
+        log.Printf("Error parsing date: %v", err)
+        c.JSON(400, gin.H{"error": "Invalid date format: " + err.Error()})
+        return
+    }
 
 	surat := models.Surat{
 		Tanggal: tanggal,

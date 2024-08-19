@@ -23,7 +23,7 @@ func main() {
 	r.POST("/Iso", controllers.IsoCreate)
 	r.PUT("/Iso/:id", controllers.IsoUpdate)
 	r.DELETE("/Iso/:id", controllers.IsoDelete)
-	r.GET("Iso", controllers.IsoIndex)
+	r.GET("/Iso", controllers.IsoIndex)
 	r.GET("/Iso/:id", controllers.IsoShow)
 
 	//Surat routes

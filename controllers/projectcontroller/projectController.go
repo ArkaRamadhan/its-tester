@@ -38,29 +38,26 @@ func ProjectCreate(c *gin.Context) {
 	log.Println("Received request body:", requestBody)
 
 	// Parse the date string
-	bulanString := requestBody.Bulan
-	bulan, err := time.Parse("01-02-2006", bulanString)
-	if err != nil {
-		c.Status(400)
-		c.JSON(400, gin.H{"error": "Format tanggal tidak valid: " + err.Error()})
-		return
-	}
-	// Parse the date string
-	izinString := requestBody.TanggalIzin
-	tanggal_izin, err := time.Parse("02-01-2006", izinString)
-	if err != nil {
-		c.Status(400)
-		c.JSON(400, gin.H{"error": "Format tanggal tidak valid: " + err.Error()})
-		return
-	}
-	// Parse the date string
-	torString := requestBody.TanggalTor
-	tanggal_tor, err := time.Parse("01-02-2006", torString)
-	if err != nil {
-		c.Status(400)
-		c.JSON(400, gin.H{"error": "Format tanggal tidak valid: " + err.Error()})
-		return
-	}
+	bulan, err := time.Parse("2006-01-02", requestBody.Bulan)
+    if err != nil {
+        log.Printf("Error parsing date: %v", err)
+        c.JSON(400, gin.H{"error": "Invalid date format: " + err.Error()})
+        return
+    }
+
+	tanggal_izin, err := time.Parse("2006-01-02", requestBody.TanggalIzin)
+    if err != nil {
+        log.Printf("Error parsing date: %v", err)
+        c.JSON(400, gin.H{"error": "Invalid date format: " + err.Error()})
+        return
+    }
+
+	tanggal_tor, err := time.Parse("2006-01-02", requestBody.TanggalTor)
+    if err != nil {
+        log.Printf("Error parsing date: %v", err)
+        c.JSON(400, gin.H{"error": "Invalid date format: " + err.Error()})
+        return
+    }
 
 	project := models.Project{
 		KodeProject:     requestBody.KodeProject,
